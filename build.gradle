@@ -1,0 +1,80 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'idea'
+}
+
+def jasyptEnvPass = System.env.JASYPT_ENCRYPTOR_PASSWORD ;
+def buildVersion = System.env.BUILD_VERSION != null ? System.env.BUILD_VERSION : "1.0.0"
+
+version = buildVersion.toString()
+group = 'com.rcuk'
+
+
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+configurations.all {
+	exclude group: 'org.apache.logging.log4j'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'com.sendgrid:sendgrid-java:4.0.1'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.203'
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	implementation 'com.auth0:java-jwt:3.3.0'
+
+
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+springBoot {
+	buildInfo()
+}
+
+bootJar {
+	mainClass = 'com.rcuk.portal.App'
+	archiveFileName = 'portal.jar'
+}
+
+jar{
+	archiveClassifier=''
+	enabled = false
+}
